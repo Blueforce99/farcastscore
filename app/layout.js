@@ -22,13 +22,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <meta name="fc:frame" content="vNext" />
-        <meta name="fc:frame:image" content="https://farcastscore.vercel.app/og-image.png" />
-        <meta name="fc:frame:button:1" content="Check Your Score" />
-        <meta name="fc:frame:button:1:action" content="link" />
-        <meta name="fc:frame:button:1:target" content="https://farcastscore.vercel.app" />
-      </head>
       <body>
         {children}
       </body>
