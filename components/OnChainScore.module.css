@@ -1,0 +1,323 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #0c0a1a 100%);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 48rem;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.headerIcon {
+  color: #a78bfa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.subtitle {
+  color: #cbd5e1;
+  margin-top: 0.5rem;
+}
+
+/* Input Section */
+.inputSection {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid #475569;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.inputContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.connectBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #a855f7;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.875rem;
+  width: fit-content;
+}
+
+.connectBtn:hover {
+  background-color: #9333ea;
+}
+
+.divider {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  flex: 1;
+  background-color: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #ffffff;
+  font-size: 0.875rem;
+}
+
+.input::placeholder {
+  color: #64748b;
+}
+
+.input:focus {
+  outline: none;
+  ring: 2px;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.1);
+}
+
+.searchBtn {
+  padding: 0.5rem 1.5rem;
+  background-color: #a855f7;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.searchBtn:hover {
+  background-color: #9333ea;
+}
+
+.searchBtn:disabled {
+  background-color: #475569;
+  cursor: not-allowed;
+}
+
+.connected {
+  color: #4ade80;
+  font-size: 0.875rem;
+}
+
+.error {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(127, 29, 29, 0.3);
+  border: 1px solid #7f1d1d;
+  border-radius: 0.375rem;
+  color: #fca5a5;
+  font-size: 0.875rem;
+}
+
+/* Score Card */
+.scoreCard {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid #475569;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.scoreHeader {
+  background: linear-gradient(90deg, #a855f7, #d946ef);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scoreLabel {
+  color: #e9d5ff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.scoreValue {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0.5rem 0 0 0;
+}
+
+.scoreIcon {
+  color: #e9d5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stats Grid */
+.statsGrid {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.statCard {
+  background: rgba(71, 85, 105, 0.3);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 0.375rem;
+  padding: 1rem;
+}
+
+.statHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  color: #cbd5e1;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.iconLarge {
+  width: 2rem;
+  height: 2rem;
+}
+
+.statIconCyan {
+  color: #06b6d4;
+  display: flex;
+  align-items: center;
+}
+
+.statIconPink {
+  color: #ec4899;
+  display: flex;
+  align-items: center;
+}
+
+.statIconOrange {
+  color: #f97316;
+  display: flex;
+  align-items: center;
+}
+
+.statIconYellow {
+  color: #eab308;
+  display: flex;
+  align-items: center;
+}
+
+.statIconGreen {
+  color: #22c55e;
+  display: flex;
+  align-items: center;
+}
+
+.statIconBlue {
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+}
+
+/* Card Footer */
+.cardFooter {
+  background: rgba(71, 85, 105, 0.2);
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+.footerText {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  color: #94a3b8;
+  padding: 3rem 1.5rem;
+}
+
+.emptyIcon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  font-size: 3rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .scoreValue {
+    font-size: 2.5rem;
+  }
+
+  .inputGroup {
+    flex-direction: column;
+  }
+
+  .searchBtn {
+    width: 100%;
+  }
+}
