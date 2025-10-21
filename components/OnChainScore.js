@@ -54,30 +54,28 @@ export default function OnChainScore() {
 
   // Initialize Farcaster SDK
   useEffect(() => {
-    // Check if running in Farcaster frame
     if (typeof window !== 'undefined') {
-      // Function to call ready when SDK is available
-      const initializeFarcasterSDK = () => {
-        if (window.sdk && window.sdk.actions && window.sdk.actions.ready) {
-          console.log('Calling Farcaster SDK ready()')
-          try {
-            window.sdk.actions.ready({})
-          } catch (err) {
-            console.error('Error calling SDK ready:', err)
-          }
-        } else {
-          console.log('Farcaster SDK not yet available')
+      // Listen for SDK ready event
+      const handleSDKReady = () => {
+        console.log('SDK ready event received')
+        if (window.sdk?.actions?.ready) {
+          window.sdk.actions.ready()
         }
       }
-      
-      // Try immediately
-      initializeFarcasterSDK()
-      
-      // Retry multiple times as SDK loads asynchronously
-      const intervals = [100, 500, 1000, 2000]
-      intervals.forEach(delay => {
-        setTimeout(initializeFarcasterSDK, delay)
-      })
+
+      // Add event listener for when SDK loads
+      window.addEventListener('farcaster:sdk:ready', handleSDKReady)
+
+      // Try calling ready immediately if SDK already exists
+      if (window.sdk?.actions?.ready) {
+        console.log('SDK already available, calling ready')
+        window.sdk.actions.ready()
+      }
+
+      // Cleanup
+      return () => {
+        window.removeEventListener('farcaster:sdk:ready', handleSDKReady)
+      }
     }
   }, [])
 
