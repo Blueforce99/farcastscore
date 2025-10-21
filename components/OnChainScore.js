@@ -250,31 +250,47 @@ export default function OnChainScore() {
     try {
       console.log('Getting Farcaster context...')
       
-      // sdk.context is a property, not a promise
-      const context = sdk.context
-      console.log('Context:', context)
+      // Wait for context to be available
+      let context = sdk.context
       
-      if (context && context.user) {
-        const user = context.user
-        console.log('User:', user)
-        
-        // Check for custody address or verified addresses
-        const address = user.custodyAddress || (user.verifications && user.verifications[0])
-        
-        if (address) {
-          console.log('Address found:', address)
-          setUserConnected(true)
-          setWalletAddress(address)
-          await fetchOnChainData(address)
-        } else {
-          setError('No wallet address found on your Farcaster account')
-        }
+      // If context is a promise, await it
+      if (context instanceof Promise) {
+        context = await context
+      }
+      
+      console.log('Context received:', context)
+      
+      if (!context || !context.user) {
+        setError('Not running in Farcaster. Please open in Warpcast or enter address manually.')
+        return
+      }
+      
+      const user = context.user
+      console.log('User data:', user)
+      
+      // Try different address fields
+      let address = null
+      
+      if (user.custodyAddress) {
+        address = user.custodyAddress
+      } else if (user.verifications && user.verifications.length > 0) {
+        address = user.verifications[0]
+      } else if (user.connectedAddresses && user.connectedAddresses.length > 0) {
+        address = user.connectedAddresses[0]
+      }
+      
+      console.log('Extracted address:', address)
+      
+      if (address && typeof address === 'string' && address.startsWith('0x')) {
+        setUserConnected(true)
+        setWalletAddress(address)
+        await fetchOnChainData(address)
       } else {
-        setError('Not running in Farcaster context. Please open in Warpcast or enter address manually.')
+        setError('No valid wallet address found. Please enter manually.')
       }
     } catch (err) {
       console.error('Wallet connection error:', err)
-      setError('Could not connect wallet. Please enter your address manually.')
+      setError('Error: ' + err.message)
     }
   }
 
