@@ -248,25 +248,29 @@ export default function OnChainScore() {
 
   const handleConnectWallet = async () => {
     try {
-      console.log('Requesting Farcaster context...')
+      console.log('Getting Farcaster context...')
       
-      // Get Farcaster context which includes user info
-      const context = await sdk.context
+      // sdk.context is a property, not a promise
+      const context = sdk.context
+      console.log('Context:', context)
       
-      if (context && context.user && context.user.verifications) {
-        // Get the first verified address
-        const verifiedAddress = context.user.verifications[0]
+      if (context && context.user) {
+        const user = context.user
+        console.log('User:', user)
         
-        if (verifiedAddress) {
-          console.log('Wallet found:', verifiedAddress)
+        // Check for custody address or verified addresses
+        const address = user.custodyAddress || (user.verifications && user.verifications[0])
+        
+        if (address) {
+          console.log('Address found:', address)
           setUserConnected(true)
-          setWalletAddress(verifiedAddress)
-          await fetchOnChainData(verifiedAddress)
+          setWalletAddress(address)
+          await fetchOnChainData(address)
         } else {
-          setError('No verified wallet found on your Farcaster account')
+          setError('No wallet address found on your Farcaster account')
         }
       } else {
-        setError('Could not get Farcaster user context')
+        setError('Not running in Farcaster context. Please open in Warpcast or enter address manually.')
       }
     } catch (err) {
       console.error('Wallet connection error:', err)
