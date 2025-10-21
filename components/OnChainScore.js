@@ -317,11 +317,6 @@ export default function OnChainScore() {
 
         <div className={styles.inputSection}>
           <div className={styles.inputContent}>
-            <button onClick={handleConnectWallet} className={styles.connectBtn}>
-              <WalletIcon />
-              Connect Wallet
-            </button>
-
             <div className={styles.divider}>Enter a wallet address to check score:</div>
             <div className={styles.inputGroup}>
               <input
