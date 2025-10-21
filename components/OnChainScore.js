@@ -254,26 +254,27 @@ export default function OnChainScore() {
 
   const handleConnectWallet = async () => {
     try {
-      // Check if user is in Farcaster frame context
-      if (typeof window !== 'undefined' && window.parent !== window) {
-        // We're in a frame, use Farcaster Auth
-        setError('Farcaster wallet integration coming soon. For now, please enter your address manually.')
-      } else if (typeof window !== 'undefined' && window.ethereum) {
-        // Use MetaMask/browser wallet
-        const accounts = await window.ethereum.request({ 
-          method: 'eth_requestAccounts' 
-        })
-        if (accounts && accounts[0]) {
+      // Check if Farcaster SDK is available
+      if (typeof window !== 'undefined' && window.sdk && window.sdk.wallet) {
+        console.log('Farcaster wallet SDK found')
+        
+        // Request wallet connection from Farcaster
+        const wallet = await window.sdk.wallet.request()
+        
+        if (wallet && wallet.address) {
           setUserConnected(true)
-          setWalletAddress(accounts[0])
-          await fetchOnChainData(accounts[0])
+          setWalletAddress(wallet.address)
+          await fetchOnChainData(wallet.address)
+        } else {
+          setError('No wallet address returned from Farcaster')
         }
       } else {
-        setError('No wallet detected. Please install MetaMask or enter address manually.')
+        // Fallback: user must enter address manually
+        setError('Farcaster wallet not available. Please enter your address manually or open this app in Warpcast.')
       }
     } catch (err) {
-      console.error('Wallet connection error:', err)
-      setError('Failed to connect wallet: ' + err.message)
+      console.error('Farcaster wallet connection error:', err)
+      setError('Could not connect Farcaster wallet. Please enter your address manually.')
     }
   }
 
