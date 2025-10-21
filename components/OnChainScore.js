@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './OnChainScore.module.css'
+import { sdk } from '@farcaster/miniapp-sdk'
 
 const ActivityIcon = () => (
   <svg className={styles.icon} fill="currentColor" viewBox="0 0 24 24">
@@ -54,29 +55,17 @@ export default function OnChainScore() {
 
   // Initialize Farcaster SDK
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Listen for SDK ready event
-      const handleSDKReady = () => {
-        console.log('SDK ready event received')
-        if (window.sdk?.actions?.ready) {
-          window.sdk.actions.ready()
-        }
-      }
-
-      // Add event listener for when SDK loads
-      window.addEventListener('farcaster:sdk:ready', handleSDKReady)
-
-      // Try calling ready immediately if SDK already exists
-      if (window.sdk?.actions?.ready) {
-        console.log('SDK already available, calling ready')
-        window.sdk.actions.ready()
-      }
-
-      // Cleanup
-      return () => {
-        window.removeEventListener('farcaster:sdk:ready', handleSDKReady)
+    const initSDK = async () => {
+      try {
+        console.log('Initializing Farcaster SDK...')
+        await sdk.actions.ready()
+        console.log('Farcaster SDK ready() called successfully')
+      } catch (error) {
+        console.error('Error initializing Farcaster SDK:', error)
       }
     }
+    
+    initSDK()
   }, [])
 
   const calculateScore = (data) => {
@@ -259,27 +248,22 @@ export default function OnChainScore() {
 
   const handleConnectWallet = async () => {
     try {
-      // Check if Farcaster SDK is available
-      if (typeof window !== 'undefined' && window.sdk && window.sdk.wallet) {
-        console.log('Farcaster wallet SDK found')
-        
-        // Request wallet connection from Farcaster
-        const wallet = await window.sdk.wallet.request()
-        
-        if (wallet && wallet.address) {
-          setUserConnected(true)
-          setWalletAddress(wallet.address)
-          await fetchOnChainData(wallet.address)
-        } else {
-          setError('No wallet address returned from Farcaster')
-        }
+      console.log('Requesting Farcaster wallet...')
+      
+      // Use Farcaster SDK to get wallet
+      const wallet = await sdk.wallet.request()
+      
+      if (wallet && wallet.address) {
+        console.log('Wallet connected:', wallet.address)
+        setUserConnected(true)
+        setWalletAddress(wallet.address)
+        await fetchOnChainData(wallet.address)
       } else {
-        // Fallback: user must enter address manually
-        setError('Farcaster wallet not available. Please enter your address manually or open this app in Warpcast.')
+        setError('No wallet address returned')
       }
     } catch (err) {
-      console.error('Farcaster wallet connection error:', err)
-      setError('Could not connect Farcaster wallet. Please enter your address manually.')
+      console.error('Wallet connection error:', err)
+      setError('Could not connect wallet. Please enter your address manually.')
     }
   }
 
