@@ -250,47 +250,51 @@ export default function OnChainScore() {
     try {
       console.log('Getting Farcaster context...')
       
-      // Wait for context to be available
-      let context = sdk.context
+      // The SDK context might need to be awaited or accessed as a property
+      const context = await sdk.context
+      console.log('Context type:', typeof context)
+      console.log('Context keys:', context ? Object.keys(context) : 'null')
       
-      // If context is a promise, await it
-      if (context instanceof Promise) {
-        context = await context
-      }
-      
-      console.log('Context received:', context)
-      
-      if (!context || !context.user) {
-        setError('Not running in Farcaster. Please open in Warpcast or enter address manually.')
+      if (!context) {
+        setError('Not running in Farcaster. Please open in Warpcast.')
         return
       }
       
+      // Try to get the user object
       const user = context.user
-      console.log('User data:', user)
+      console.log('User type:', typeof user)
       
-      // Try different address fields
-      let address = null
-      
-      if (user.custodyAddress) {
-        address = user.custodyAddress
-      } else if (user.verifications && user.verifications.length > 0) {
-        address = user.verifications[0]
-      } else if (user.connectedAddresses && user.connectedAddresses.length > 0) {
-        address = user.connectedAddresses[0]
+      if (!user) {
+        setError('No user found in Farcaster context')
+        return
       }
       
-      console.log('Extracted address:', address)
+      // Try accessing common address properties
+      let address = null
+      
+      // Try as direct properties
+      if (typeof user.custodyAddress === 'string') {
+        address = user.custodyAddress
+      } else if (Array.isArray(user.verifications) && user.verifications.length > 0) {
+        address = user.verifications[0]
+      } else if (user.username) {
+        // If we have username, show a message to connect manually
+        setError(`Hi @${user.username}! Please enter your wallet address manually for now.`)
+        return
+      }
+      
+      console.log('Final address:', address)
       
       if (address && typeof address === 'string' && address.startsWith('0x')) {
         setUserConnected(true)
         setWalletAddress(address)
         await fetchOnChainData(address)
       } else {
-        setError('No valid wallet address found. Please enter manually.')
+        setError('Could not retrieve wallet address. Please enter manually.')
       }
     } catch (err) {
       console.error('Wallet connection error:', err)
-      setError('Error: ' + err.message)
+      setError('Error connecting: ' + err.message)
     }
   }
 
@@ -318,7 +322,7 @@ export default function OnChainScore() {
               Connect Wallet
             </button>
 
-            <div className={styles.divider}>Enter a wallet address:</div>
+            <div className={styles.divider}>Enter a wallet address to check score:</div>
             <div className={styles.inputGroup}>
               <input
                 type="text"
