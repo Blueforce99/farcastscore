@@ -54,18 +54,23 @@ export default function OnChainScore() {
 
   // Initialize Farcaster SDK
   useEffect(() => {
-    // Check if running in Farcaster
-    if (typeof window !== 'undefined' && window.parent !== window) {
-      // Load Farcaster SDK
-      const script = document.createElement('script')
-      script.src = 'https://sdk.farcaster.xyz/v1.js'
-      script.async = true
-      script.onload = () => {
-        if (window.sdk) {
+    // Check if running in Farcaster frame
+    if (typeof window !== 'undefined') {
+      // Try to access Farcaster SDK if it exists
+      const checkSDK = () => {
+        if (window.sdk && window.sdk.actions) {
+          console.log('Farcaster SDK found, calling ready()')
           window.sdk.actions.ready()
+        } else {
+          console.log('Farcaster SDK not found, app running standalone')
         }
       }
-      document.body.appendChild(script)
+      
+      // Check immediately
+      checkSDK()
+      
+      // Also check after a short delay in case SDK loads async
+      setTimeout(checkSDK, 1000)
     }
   }, [])
 
