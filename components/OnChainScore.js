@@ -56,21 +56,28 @@ export default function OnChainScore() {
   useEffect(() => {
     // Check if running in Farcaster frame
     if (typeof window !== 'undefined') {
-      // Try to access Farcaster SDK if it exists
-      const checkSDK = () => {
-        if (window.sdk && window.sdk.actions) {
-          console.log('Farcaster SDK found, calling ready()')
-          window.sdk.actions.ready()
+      // Function to call ready when SDK is available
+      const initializeFarcasterSDK = () => {
+        if (window.sdk && window.sdk.actions && window.sdk.actions.ready) {
+          console.log('Calling Farcaster SDK ready()')
+          try {
+            window.sdk.actions.ready({})
+          } catch (err) {
+            console.error('Error calling SDK ready:', err)
+          }
         } else {
-          console.log('Farcaster SDK not found, app running standalone')
+          console.log('Farcaster SDK not yet available')
         }
       }
       
-      // Check immediately
-      checkSDK()
+      // Try immediately
+      initializeFarcasterSDK()
       
-      // Also check after a short delay in case SDK loads async
-      setTimeout(checkSDK, 1000)
+      // Retry multiple times as SDK loads asynchronously
+      const intervals = [100, 500, 1000, 2000]
+      intervals.forEach(delay => {
+        setTimeout(initializeFarcasterSDK, delay)
+      })
     }
   }, [])
 
