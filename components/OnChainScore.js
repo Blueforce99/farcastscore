@@ -52,6 +52,23 @@ export default function OnChainScore() {
   const [error, setError] = useState('')
   const [userConnected, setUserConnected] = useState(false)
 
+  // Initialize Farcaster SDK
+  useEffect(() => {
+    // Check if running in Farcaster
+    if (typeof window !== 'undefined' && window.parent !== window) {
+      // Load Farcaster SDK
+      const script = document.createElement('script')
+      script.src = 'https://sdk.farcaster.xyz/v1.js'
+      script.async = true
+      script.onload = () => {
+        if (window.sdk) {
+          window.sdk.actions.ready()
+        }
+      }
+      document.body.appendChild(script)
+    }
+  }, [])
+
   const calculateScore = (data) => {
     let score = 0
     
